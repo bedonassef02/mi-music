@@ -6,6 +6,8 @@ import { ArtistModule } from './artist/artist.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { PlaylistModule } from './playlist/playlist.module';
+import { GenreModule } from './genre/genre.module';
+import { AlbumModule } from './album/album.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { PlaylistModule } from './playlist/playlist.module';
     SongModule,
     ArtistModule,
     PlaylistModule,
+    GenreModule,
+    AlbumModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -18,6 +18,9 @@ export class CreateSongDto {
   @IsOptional()
   @IsMongoId({ each: true })
   artists: 'UnKnown';
+  @IsNotEmpty()
+  @IsMongoId()
+  genre: string;
   @IsOptional()
   @IsDate()
   releaseDate: Date;
