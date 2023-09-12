@@ -22,6 +22,8 @@ export class Song {
   duration: number;
   @Prop()
   fileName: string;
+  @Prop()
+  image: string;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);
