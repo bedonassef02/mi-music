@@ -10,6 +10,8 @@ export class PlaylistService {
   constructor(
     @InjectModel(Playlist.name) private readonly playlistModel: Model<Playlist>,
   ) {}
+
+  // TODO: create a playlist history for each user when sign up
   create(createPlaylistDto: CreatePlaylistDto): Promise<PlaylistDocument> {
     return this.playlistModel.create(createPlaylistDto);
   }

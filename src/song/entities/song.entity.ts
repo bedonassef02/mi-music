@@ -3,6 +3,7 @@ import { HydratedDocument } from 'mongoose';
 import { Artist } from '../../artist/entities/artist.entity';
 import * as mongoose from 'mongoose';
 import { Genre } from '../../genre/entities/genre.entity';
+import { Album } from '../../album/entities/album.entity';
 
 export type SongDocument = HydratedDocument<Song>;
 @Schema({ timestamps: true })
@@ -11,10 +12,12 @@ export class Song {
   name: string;
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }])
   artists: Artist[];
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Artist' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' })
   genre: Genre;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Album' })
+  album: Album;
   @Prop()
-  releaseDate: Date;
+  releaseYear: number;
   @Prop()
   duration: number;
   @Prop()

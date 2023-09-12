@@ -1,5 +1,4 @@
 import {
-  IsDate,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -22,8 +21,10 @@ export class CreateSongDto {
   @IsMongoId()
   genre: string;
   @IsOptional()
-  @IsDate()
-  releaseDate: Date;
+  @IsNumber()
+  @Min(1960)
+  @Max(2023)
+  releaseYear: number;
   @IsNotEmpty()
   @IsNumber()
   @Max(100)
@@ -32,4 +33,7 @@ export class CreateSongDto {
   @IsNotEmpty()
   @IsString()
   fileName: string;
+  @IsOptional()
+  @IsString()
+  image: string;
 }
