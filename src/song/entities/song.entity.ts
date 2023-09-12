@@ -11,11 +11,11 @@ export class Song {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }])
   artists: Artist[];
   @Prop()
-  releaseDate: string;
+  releaseDate: Date;
   @Prop()
   duration: number;
   @Prop()
-  filename: string;
+  fileName: string;
 }
 
 export const SongSchema = SchemaFactory.createForClass(Song);
