@@ -15,6 +15,7 @@ import { UserDocument } from '../user/entities/user.entity';
 import { plainIntoUserDto } from './utils/helpers/plain-into-user-dto';
 import { UserDto } from './dto/user.dto';
 import { CreatePlaylistDto } from '../playlist/dto/create-playlist.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<UserDto> {
@@ -114,6 +116,7 @@ export class AuthService {
       user: id,
       name: 'history',
     };
+    this.eventEmitter.emitAsync('playlist.create', createPlaylistDto).then();
   }
 
   private generateResponse(user: UserDocument): UserDto {

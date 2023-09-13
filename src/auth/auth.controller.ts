@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   UseInterceptors,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -15,6 +14,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { ChangeUsernameDto } from './dto/change-username.dto';
 import { UserDto } from './dto/user.dto';
 import { CookieTokenInterceptor } from './interceptors/cookie-token.interceptor';
+import { User } from '../user/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -36,20 +36,18 @@ export class AuthController {
   @Patch('change-password')
   @UseInterceptors(CookieTokenInterceptor)
   changePassword(
-    @Req() req: any,
+    @User('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<UserDto> {
-    const { id } = req.user;
     return this.authService.changePassword(id, changePasswordDto);
   }
 
   @Patch('change-username')
   @UseInterceptors(CookieTokenInterceptor)
   changeUsername(
-    @Req() req: any,
+    @User('id') id: string,
     @Body() changeUsernameDto: ChangeUsernameDto,
   ): Promise<UserDto> {
-    const { id } = req.user;
     return this.authService.changeUsername(id, changeUsernameDto);
   }
 

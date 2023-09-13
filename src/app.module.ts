@@ -10,6 +10,7 @@ import { GenreModule } from './genre/genre.module';
 import { AlbumModule } from './album/album.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
       expandVariables: true,
     }),
+    EventEmitterModule.forRoot(),
     DatabaseModule,
     SongModule,
     ArtistModule,

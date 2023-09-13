@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Song, SongDocument } from '../../song/entities/song.entity';
+import { Song } from '../../song/entities/song.entity';
 import * as mongoose from 'mongoose';
 import { HydratedDocument } from 'mongoose';
 import { User } from '../../user/entities/user.entity';
@@ -15,6 +15,7 @@ export class Playlist {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
+  // TODO: add image
 }
 
 export const PlaylistSchema = SchemaFactory.createForClass(Playlist);
