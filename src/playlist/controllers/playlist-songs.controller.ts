@@ -13,7 +13,6 @@ export class PlaylistSongsController {
     @User('id') user: string,
     @Body() addSongDto: PlaylistSongDto,
   ): Promise<PlaylistDocument> {
-    console.log({ _id, user, addSongDto });
     return this.playlistSongsService.addSong({ _id, user }, addSongDto.song);
   }
 

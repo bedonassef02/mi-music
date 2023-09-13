@@ -15,6 +15,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { USER_ROLES } from '../auth/utils/types/user-role';
 import { Roles } from '../auth/decorators/roles.decorator';
 
+// TODO: make another controller and service to get genre with songs
 @Controller('genre')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
