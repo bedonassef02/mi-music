@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -16,8 +17,6 @@ import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class AuthService {
-  // TODO: inject userService & jwtService into constructor
-
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
@@ -30,9 +29,7 @@ export class AuthService {
       registerDto.password,
     );
     const user: UserDocument = await this.userService.create(registerDto);
-    const result: UserDto = plainIntoUserDto(user);
-    result.token = this.jwtService.sign(result.user);
-    return result;
+    return this.generateResponse(user);
   }
 
   async login(loginDto: LoginDto) {
@@ -46,18 +43,55 @@ export class AuthService {
         user.password,
       ))
     ) {
-      const result: UserDto = plainIntoUserDto(user);
-      result.token = this.jwtService.sign(result.user);
-      return result;
+      return this.generateResponse(user);
     }
     throw new BadRequestException('email or password not match our records');
   }
 
-  changePassword(changePasswordDto: ChangePasswordDto) {
-    
+  async changePassword(
+    id: string,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<UserDto> {
+    if (changePasswordDto.newPassword === changePasswordDto.confirmPassword) {
+      const user: UserDocument = await this.userService.findOne(id);
+      if (
+        await this.passwordService.comparePassword(
+          changePasswordDto.newPassword,
+          user.password,
+        )
+      ) {
+        changePasswordDto.newPassword = await this.passwordService.hashPassword(
+          changePasswordDto.newPassword,
+        );
+        const user = await this.userService.changePassword(
+          id,
+          changePasswordDto.newPassword,
+        );
+        return this.generateResponse(user);
+      }
+      throw new UnauthorizedException('password does not match out records');
+    }
+    throw new BadRequestException('new password not match confirm password');
   }
 
-  changeUsername(changeUsernameDto: ChangeUsernameDto) {}
+  async changeUsername(
+    id: string,
+    changeUsernameDto: ChangeUsernameDto,
+  ): Promise<UserDto> {
+    const user: UserDocument = await this.userService.changeUsername(
+      id,
+      changeUsernameDto.username,
+    );
+    return this.generateResponse(user);
+  }
+
+  verifyToken(token: string): Promise<any> {
+    try {
+      return this.jwtService.verify(token);
+    } catch (e) {
+      throw new BadRequestException('token is not valid');
+    }
+  }
 
   private async isUserExist(email: string): Promise<true> {
     const user: UserDocument | undefined = await this.userService.findByEmail(
@@ -67,5 +101,11 @@ export class AuthService {
       throw new ConflictException('this email is already in use');
     }
     return true;
+  }
+
+  private generateResponse(user: UserDocument): UserDto {
+    const result = plainIntoUserDto(user);
+    result.token = this.jwtService.sign(result.user);
+    return result;
   }
 }

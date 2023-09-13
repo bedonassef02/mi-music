@@ -22,4 +22,11 @@ export class UserService {
   changeRole(id: string, role: string): Promise<UserDocument> {
     return this.userModel.findByIdAndUpdate(id, { role }, { new: true });
   }
+
+  changePassword(id: string, password: string): Promise<UserDocument> {
+    return this.userModel.findByIdAndUpdate(id, { password }, { new: true });
+  }
+  changeUsername(id: string, username: string): Promise<UserDocument> {
+    return this.userModel.findByIdAndUpdate(id, { username }, { new: true });
+  }
 }
