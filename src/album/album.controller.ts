@@ -13,7 +13,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumDocument } from './entities/album.entity';
 import { USER_ROLES } from '../auth/utils/types/user-role';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { Public } from "../auth/decorators/public.decorator";
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('album')
 export class AlbumController {
