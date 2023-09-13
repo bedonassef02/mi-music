@@ -7,6 +7,8 @@ import { AuthMiddleware } from '../auth/middlewares/auth.middleware';
 import { IsUserUpdatedMiddleware } from '../auth/middlewares/is-user-updated.middleware';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { PlaylistSongsController } from './controllers/playlist-songs.controller';
+import { PlaylistSongsService } from './services/playlist-songs.service';
 
 @Module({
   imports: [
@@ -16,13 +18,13 @@ import { UserModule } from '../user/user.module';
     AuthModule,
     UserModule,
   ],
-  controllers: [PlaylistController],
-  providers: [PlaylistService],
+  controllers: [PlaylistController, PlaylistSongsController],
+  providers: [PlaylistService, PlaylistSongsService],
 })
 export class PlaylistModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware, IsUserUpdatedMiddleware)
-      .forRoutes(PlaylistController);
+      .forRoutes(PlaylistController, PlaylistSongsController);
   }
 }
