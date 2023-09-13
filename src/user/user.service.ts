@@ -13,12 +13,8 @@ export class UserService {
     return this.userModel.create(registerUserDto);
   }
 
-  findByEmail(email: string): Promise<UserDocument> {
+  findByEmail(email: string): Promise<UserDocument | undefined> {
     return this.userModel.findOne({ email });
-  }
-
-  isEmailExist(email: string): boolean {
-    return !!this.findByEmail(email);
   }
   findOne(id: string): Promise<UserDocument> {
     return this.userModel.findById(id);

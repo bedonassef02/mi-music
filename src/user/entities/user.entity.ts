@@ -11,8 +11,9 @@ export class User {
   @Prop()
   password: string;
   // TODO: make roles as enum
+  // TODO: make default user
   @Prop()
-  roles: string;
+  role: string;
   @Prop()
   image: string;
 }
