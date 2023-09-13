@@ -14,6 +14,7 @@ import { PasswordService } from './services/password.service';
 import { UserDocument } from '../user/entities/user.entity';
 import { plainIntoUserDto } from './utils/helpers/plain-into-user-dto';
 import { UserDto } from './dto/user.dto';
+import { CreatePlaylistDto } from '../playlist/dto/create-playlist.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +30,8 @@ export class AuthService {
       registerDto.password,
     );
     const user: UserDocument = await this.userService.create(registerDto);
+    // TODO: auto create a history playlist
+    this.createHistoryPlaylist(user.id);
     return this.generateResponse(user);
   }
 
@@ -52,13 +55,17 @@ export class AuthService {
     id: string,
     changePasswordDto: ChangePasswordDto,
   ): Promise<UserDto> {
-    if (changePasswordDto.newPassword === changePasswordDto.confirmPassword) {
-      const user: UserDocument = await this.userService.findOne(id);
+    if (
+      this.passwordService.isSameNewPasswords(changePasswordDto) &&
+      this.passwordService.isNewPasswordChanged(changePasswordDto)
+    ) {
+      const user: UserDocument | undefined = await this.userService.findOne(id);
       if (
-        await this.passwordService.comparePassword(
-          changePasswordDto.newPassword,
+        user &&
+        (await this.passwordService.comparePassword(
+          changePasswordDto.currentPassword,
           user.password,
-        )
+        ))
       ) {
         changePasswordDto.newPassword = await this.passwordService.hashPassword(
           changePasswordDto.newPassword,
@@ -71,7 +78,6 @@ export class AuthService {
       }
       throw new UnauthorizedException('password does not match out records');
     }
-    throw new BadRequestException('new password not match confirm password');
   }
 
   async changeUsername(
@@ -101,6 +107,13 @@ export class AuthService {
       throw new ConflictException('this email is already in use');
     }
     return true;
+  }
+
+  private createHistoryPlaylist(id: string) {
+    const createPlaylistDto: CreatePlaylistDto = {
+      user: id,
+      name: 'history',
+    };
   }
 
   private generateResponse(user: UserDocument): UserDto {

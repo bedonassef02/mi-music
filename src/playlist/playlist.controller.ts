@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistDocument } from './entities/playlist.entity';
+import { AddSongToPlaylistDto } from './dto/add-song-to-playlist.dto';
 
 // TODO: Add user to dto
 @Controller('playlist')
@@ -45,5 +47,16 @@ export class PlaylistController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     await this.playlistService.remove(id);
+  }
+
+  @Post(':id/songs')
+  async addToPlaylist(
+    @Req() request: any,
+    @Body() addSongToPlaylistDto: AddSongToPlaylistDto,
+    @Param('id') id: string,
+  ): Promise<PlaylistDocument> {
+    addSongToPlaylistDto.user = request.user.id;
+    addSongToPlaylistDto.playlist = id;
+    return this.playlistService.addToPlaylist(addSongToPlaylistDto);
   }
 }

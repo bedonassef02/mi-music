@@ -15,11 +15,11 @@ export class CookieTokenInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap((data) => {
-        if (data && data.accessToken) {
+        if (data && data.token) {
           const cookieTokenMaxAge: number = this.configService.get<number>(
             'COOKIE_TOKEN_MAX_AGE',
           );
-          response.cookie('accessToken', data.accessToken, {
+          response.cookie('token', data.token, {
             maxAge: cookieTokenMaxAge * 24 * 60 * 60 * 1000,
           });
         }

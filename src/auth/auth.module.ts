@@ -30,14 +30,15 @@ import { IsUserUpdatedMiddleware } from './middlewares/is-user-updated.middlewar
   ],
   controllers: [AuthController],
   providers: [AuthService, PasswordService],
+  exports: [AuthService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware, IsUserUpdatedMiddleware)
       .exclude(
-        { path: '/register', method: RequestMethod.POST },
-        { path: '/login', method: RequestMethod.POST },
+        { path: 'auth/register', method: RequestMethod.POST },
+        { path: 'auth/login', method: RequestMethod.POST },
       )
       .forRoutes(AuthController);
   }

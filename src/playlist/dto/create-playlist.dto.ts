@@ -1,11 +1,22 @@
-import { IsMongoId, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  IsMongoId,
+  IsNotEmpty,
+  IsNotIn,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreatePlaylistDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 128)
+  @IsNotIn(['history'])
   name: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsMongoId({ each: true })
-  songs: string;
+  songs?: string;
+  @IsOptional()
+  @IsMongoId()
+  user: string;
 }

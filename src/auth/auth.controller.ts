@@ -33,8 +33,8 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  // TODO: refresh token
   @Patch('change-password')
+  @UseInterceptors(CookieTokenInterceptor)
   changePassword(
     @Req() req: any,
     @Body() changePasswordDto: ChangePasswordDto,
@@ -44,6 +44,7 @@ export class AuthController {
   }
 
   @Patch('change-username')
+  @UseInterceptors(CookieTokenInterceptor)
   changeUsername(
     @Req() req: any,
     @Body() changeUsernameDto: ChangeUsernameDto,
@@ -51,4 +52,6 @@ export class AuthController {
     const { id } = req.user;
     return this.authService.changeUsername(id, changeUsernameDto);
   }
+
+  // TODO: implement reset password
 }
