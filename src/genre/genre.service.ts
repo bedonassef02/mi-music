@@ -4,6 +4,7 @@ import { UpdateGenreDto } from './dto/update-genre.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Genre, GenreDocument } from './entities/genre.entity';
 import { Model } from 'mongoose';
+import { GenreQueryFeature } from './dto/genre-query.feature';
 
 @Injectable()
 export class GenreService {
@@ -15,8 +16,13 @@ export class GenreService {
     return this.genreModel.create(createGenreDto);
   }
 
-  findAll(): Promise<GenreDocument[]> {
-    return this.genreModel.find();
+  findAll(query: GenreQueryFeature): Promise<GenreDocument[]> {
+    return this.genreModel
+      .find({ $or: query.searchQuery })
+      .select(query.fields)
+      .limit(query.limit)
+      .skip(query.skip)
+      .sort(query.sort);
   }
 
   findOne(id: string): Promise<GenreDocument | undefined> {

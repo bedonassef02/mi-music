@@ -23,7 +23,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
-    private eventEmitter: EventEmitter2,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<UserDto> {
@@ -116,6 +116,8 @@ export class AuthService {
       user: id,
       name: 'history',
     };
+    this.eventEmitter.emitAsync('playlist.create', createPlaylistDto).then();
+    createPlaylistDto.name = 'favorite';
     this.eventEmitter.emitAsync('playlist.create', createPlaylistDto).then();
   }
 

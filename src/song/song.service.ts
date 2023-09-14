@@ -4,6 +4,7 @@ import { UpdateSongDto } from './dto/update-song.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Song, SongDocument } from './entities/song.entity';
 import { Model } from 'mongoose';
+import { SongQueryFeature } from './dto/song-query.feature';
 
 @Injectable()
 export class SongService {
@@ -14,8 +15,13 @@ export class SongService {
     return this.songModel.create(createSongDto);
   }
 
-  findAll(): Promise<SongDocument[]> {
-    return this.songModel.find();
+  findAll(query: SongQueryFeature): Promise<SongDocument[]> {
+    return this.songModel
+      .find({ $or: query.searchQuery })
+      .select(query.fields)
+      .limit(query.limit)
+      .skip(query.skip)
+      .sort(query.sort);
   }
 
   // TODO: add to history playlist using event listener

@@ -4,6 +4,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Album, AlbumDocument } from './entities/album.entity';
 import { Model } from 'mongoose';
+import { AlbumQueryFeature } from './dto/album-query.feature';
 
 @Injectable()
 export class AlbumService {
@@ -14,8 +15,14 @@ export class AlbumService {
     return this.albumModel.create(createAlbumDto);
   }
 
-  findAll(): Promise<AlbumDocument[]> {
-    return this.albumModel.find();
+  findAll(query: AlbumQueryFeature): Promise<AlbumDocument[]> {
+    console.log(query);
+    return this.albumModel
+      .find({ $or: query.searchQuery })
+      .select(query.fields)
+      .limit(query.limit)
+      .skip(query.skip)
+      .sort(query.sort);
   }
 
   findOne(id: string): Promise<AlbumDocument | undefined> {

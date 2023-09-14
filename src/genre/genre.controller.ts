@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
 import { GenreService } from './genre.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
@@ -14,6 +16,8 @@ import { GenreDocument } from './entities/genre.entity';
 import { Public } from '../auth/decorators/public.decorator';
 import { USER_ROLES } from '../auth/utils/types/user-role';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { GenreQueryFeature } from './dto/genre-query.feature';
+import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 
 // TODO: make another controller and service to get genre with songs
 @Controller('genre')
@@ -28,12 +32,13 @@ export class GenreController {
 
   @Get()
   @Public()
-  findAll(): Promise<GenreDocument[]> {
-    return this.genreService.findAll();
+  findAll(@Query() query: GenreQueryFeature): Promise<GenreDocument[]> {
+    return this.genreService.findAll(query);
   }
 
   @Get(':id')
   @Public()
+  @UsePipes(ParseMongoIdPipe)
   findOne(@Param('id') id: string): Promise<GenreDocument | undefined> {
     return this.genreService.findOne(id);
   }
@@ -41,7 +46,7 @@ export class GenreController {
   @Patch(':id')
   @Roles(USER_ROLES.ADMIN)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseMongoIdPipe) id: string,
     @Body() updateGenreDto: UpdateGenreDto,
   ): Promise<GenreDocument | undefined> {
     return this.genreService.update(id, updateGenreDto);
@@ -49,6 +54,7 @@ export class GenreController {
 
   @Delete(':id')
   @Roles(USER_ROLES.ADMIN)
+  @UsePipes(ParseMongoIdPipe)
   remove(@Param('id') id: string): Promise<void> {
     return this.genreService.remove(id);
   }

@@ -1,13 +1,22 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UsePipes,
+} from '@nestjs/common';
 import { User } from '../../user/decorators/user.decorator';
 import { PlaylistSongDto } from '../dto/playlist-song.dto';
 import { PlaylistDocument } from '../entities/playlist.entity';
 import { PlaylistSongsService } from '../services/playlist-songs.service';
+import { ParseMongoIdPipe } from '../../utils/pipes/is-mongo-id.pipe';
 
 @Controller('playlist/:id/songs')
 export class PlaylistSongsController {
   constructor(private readonly playlistSongsService: PlaylistSongsService) {}
   @Post()
+  @UsePipes(ParseMongoIdPipe)
   async addSong(
     @Param('id') _id: string,
     @User('id') user: string,
@@ -17,6 +26,7 @@ export class PlaylistSongsController {
   }
 
   @Delete()
+  @UsePipes(ParseMongoIdPipe)
   async removeSong(
     @Param('id') _id: string,
     @User('id') user: string,

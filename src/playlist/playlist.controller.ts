@@ -8,12 +8,14 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  UsePipes,
 } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { PlaylistDocument } from './entities/playlist.entity';
 import { User } from '../user/decorators/user.decorator';
+import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 @Controller('playlist')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
@@ -33,6 +35,7 @@ export class PlaylistController {
   }
 
   @Get(':id')
+  @UsePipes(ParseMongoIdPipe)
   findOne(@Param('id') _id: string, @User('id') user: string) {
     return this.playlistService.findOne({ _id, user });
   }
@@ -40,7 +43,7 @@ export class PlaylistController {
   // TODO: make guard to check if this is for same user
   @Patch(':id')
   update(
-    @Param('id') _id: string,
+    @Param('id', ParseMongoIdPipe) _id: string,
     @User('id') user: string,
     @Body() updatePlaylistDto: UpdatePlaylistDto,
   ): Promise<PlaylistDocument | undefined> {
@@ -49,6 +52,7 @@ export class PlaylistController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UsePipes(ParseMongoIdPipe)
   async remove(
     @User('id') user: string,
     @Param('id') _id: string,
