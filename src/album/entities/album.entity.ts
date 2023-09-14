@@ -11,7 +11,7 @@ export class Album {
   artist: Artist;
   @Prop()
   releaseYear: number;
-  @Prop()
+  @Prop({ default: 'default.jpg' })
   image: string;
 }
 

@@ -31,10 +31,7 @@ export class CreateSongDto {
   @Max(100)
   @Min(0)
   duration: number;
-  @IsNotEmpty()
-  @IsString()
-  fileName: string;
   @IsOptional()
   @IsString()
-  image: string;
+  audio: string;
 }

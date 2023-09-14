@@ -1,0 +1,1 @@
+export const ALBUM_IMAGE_DIR = 'ALBUM_IMAGE_DIR';

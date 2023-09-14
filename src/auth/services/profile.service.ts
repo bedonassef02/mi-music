@@ -7,7 +7,6 @@ import { UserService } from '../../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { PasswordService } from './password.service';
 import { plainIntoUserDto } from '../utils/helpers/plain-into-user-dto';
-import { ChangeImageDto } from '../dto/change-image.dto';
 
 @Injectable()
 export class ProfileService {

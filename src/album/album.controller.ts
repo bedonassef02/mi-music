@@ -8,6 +8,9 @@ import {
   Delete,
   Query,
   UsePipes,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -18,11 +21,12 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Public } from '../auth/decorators/public.decorator';
 import { AlbumQueryFeature } from './dto/album-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { imageTypeValidation } from '../utils/validation/image-type.validation';
 
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
-  // TODO: upload image
   @Post()
   @Roles(USER_ROLES.ADMIN)
   create(@Body() createAlbumDto: CreateAlbumDto): Promise<AlbumDocument> {
@@ -44,6 +48,7 @@ export class AlbumController {
 
   @Patch(':id')
   @Roles(USER_ROLES.ADMIN)
+  @UseInterceptors(FileInterceptor('image'))
   update(
     @Param('id', ParseMongoIdPipe) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
@@ -56,5 +61,16 @@ export class AlbumController {
   @UsePipes(ParseMongoIdPipe)
   remove(@Param('id') id: string): Promise<void> {
     return this.albumService.remove(id);
+  }
+
+  @Patch(':id/change-image')
+  @Roles(USER_ROLES.ADMIN)
+  @UseInterceptors(FileInterceptor('image'))
+  changeImage(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @UploadedFile(new ParseFilePipe(imageTypeValidation()))
+    image: Express.Multer.File,
+  ): Promise<AlbumDocument | undefined> {
+    return this.albumService.update(id, { image: image.filename });
   }
 }

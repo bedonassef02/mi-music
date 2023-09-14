@@ -11,7 +11,7 @@ import { ProfileService } from './services/profile.service';
 import { ProfileController } from './controllers/profile.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { createJwtModuleConfig } from './utils/helpers/create-jwt-module-config';
-import { createMulterModuleConfig } from './utils/helpers/create-multer-module-config';
+import { createAuthMulterModuleConfig } from './utils/helpers/create-auth-multer-module-config';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { createMulterModuleConfig } from './utils/helpers/create-multer-module-c
     MulterModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: createMulterModuleConfig,
+      useFactory: createAuthMulterModuleConfig,
     }),
     UserModule,
   ],

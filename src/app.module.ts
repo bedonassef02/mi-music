@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SongModule } from './song/song.module';
 import { ArtistModule } from './artist/artist.module';
 import { DatabaseModule } from './database/database.module';
@@ -30,7 +28,5 @@ import { configSchemaValidation } from './utils/validation/config-schema.validat
     UserModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

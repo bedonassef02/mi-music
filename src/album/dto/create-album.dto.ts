@@ -2,6 +2,7 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   Max,
   Min,
@@ -14,12 +15,9 @@ export class CreateAlbumDto {
   @IsNotEmpty()
   @IsMongoId()
   artist: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @Min(1960)
   @Max(2023)
   releaseYear: string;
-  @IsNotEmpty()
-  @IsString()
-  image: string;
 }

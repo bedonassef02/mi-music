@@ -21,8 +21,8 @@ export class Song {
   @Prop()
   duration: number;
   @Prop()
-  fileName: string;
-  @Prop()
+  audio: string;
+  @Prop({ default: 'default.jpg' })
   image: string;
 }
 

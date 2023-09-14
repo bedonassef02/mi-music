@@ -9,12 +9,20 @@ import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
 import { PlaylistSongsController } from './controllers/playlist-songs.controller';
 import { PlaylistSongsService } from './services/playlist-songs.service';
+import { MulterModule } from '@nestjs/platform-express';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { createPlaylistMulterModuleConfig } from './utils/helpers/create-playlist-multer-module-config';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Playlist.name, schema: PlaylistSchema },
     ]),
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: createPlaylistMulterModuleConfig,
+    }),
     AuthModule,
     UserModule,
   ],

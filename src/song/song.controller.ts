@@ -8,6 +8,9 @@ import {
   Delete,
   Query,
   UsePipes,
+  UploadedFile,
+  UseInterceptors,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { SongService } from './song.service';
 import { CreateSongDto } from './dto/create-song.dto';
@@ -18,15 +21,22 @@ import { USER_ROLES } from '../auth/utils/types/user-role';
 import { Public } from '../auth/decorators/public.decorator';
 import { SongQueryFeature } from './dto/song-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { imageTypeValidation } from '../utils/validation/image-type.validation';
 
 @Controller('song')
 export class SongController {
   constructor(private readonly songService: SongService) {}
 
-  // TODO: upload audio file & image
+  // TODO: upload audio file
   @Post()
   @Roles(USER_ROLES.ADMIN)
-  create(@Body() createSongDto: CreateSongDto): Promise<SongDocument> {
+  @UseInterceptors(FileInterceptor('audio'))
+  create(
+    @Body() createSongDto: CreateSongDto,
+    @UploadedFile() audio: Express.Multer.File,
+  ): Promise<SongDocument> {
+    createSongDto.audio = audio.filename;
     return this.songService.create(createSongDto);
   }
 
@@ -43,6 +53,7 @@ export class SongController {
     return this.songService.findOne(id);
   }
 
+  // TODO: implement update image
   @Patch(':id')
   @Roles(USER_ROLES.ADMIN)
   update(
@@ -57,5 +68,16 @@ export class SongController {
   @UsePipes(ParseMongoIdPipe)
   async remove(@Param('id') id: string): Promise<void> {
     await this.songService.remove(id);
+  }
+
+  @Patch(':id/change-image')
+  @Roles(USER_ROLES.ADMIN)
+  @UseInterceptors(FileInterceptor('image'))
+  changeImage(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @UploadedFile(new ParseFilePipe(imageTypeValidation()))
+    image: Express.Multer.File,
+  ): Promise<any | undefined> {
+    return this.songService.update(id, { image: image.filename });
   }
 }

@@ -4,5 +4,7 @@ import { Exclude } from 'class-transformer';
 
 export class UpdatePlaylistDto extends PartialType(CreatePlaylistDto) {
   @Exclude()
-  user: string;
+  user?: string;
+  @Exclude()
+  image: string;
 }

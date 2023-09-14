@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ParseFilePipe,
   Patch,
   UploadedFile,
   UseInterceptors,
@@ -11,8 +12,8 @@ import { ChangePasswordDto } from '../dto/change-password.dto';
 import { UserDto } from '../dto/user.dto';
 import { ChangeUsernameDto } from '../dto/change-username.dto';
 import { ProfileService } from '../services/profile.service';
-import { ChangeImageDto } from '../dto/change-image.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { imageTypeValidation } from '../../utils/validation/image-type.validation';
 
 @Controller('profile')
 export class ProfileController {
@@ -40,9 +41,9 @@ export class ProfileController {
   @UseInterceptors(FileInterceptor('image'), CookieTokenInterceptor)
   changeImage(
     @User('id') id: string,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile(new ParseFilePipe(imageTypeValidation()))
+    image: Express.Multer.File,
   ): Promise<UserDto> {
     return this.profileService.changeImage(id, image.filename);
   }
-  // TODO: implement change profile image
 }
