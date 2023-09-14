@@ -56,14 +56,8 @@ export class ProfileService {
     return this.generateResponse(user);
   }
 
-  async changeImage(
-    id: string,
-    changeImageDto: ChangeImageDto,
-  ): Promise<UserDto> {
-    const user: UserDocument = await this.userService.changeImage(
-      id,
-      changeImageDto.image,
-    );
+  async changeImage(id: string, image: string): Promise<UserDto> {
+    const user: UserDocument = await this.userService.changeImage(id, image);
     return this.generateResponse(user);
   }
 

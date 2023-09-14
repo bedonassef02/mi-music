@@ -13,7 +13,7 @@ export class User {
   password: string;
   @Prop({ default: USER_ROLES.USER, enum: USER_ROLES })
   role: string;
-  @Prop()
+  @Prop({ default: 'default.jpg' })
   image: string;
 }
 

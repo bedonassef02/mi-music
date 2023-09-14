@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -14,6 +9,9 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 import { IsUserUpdatedMiddleware } from './middlewares/is-user-updated.middleware';
 import { ProfileService } from './services/profile.service';
 import { ProfileController } from './controllers/profile.controller';
+import { MulterModule } from '@nestjs/platform-express';
+import { createJwtModuleConfig } from './utils/helpers/create-jwt-module-config';
+import { createMulterModuleConfig } from './utils/helpers/create-multer-module-config';
 
 @Module({
   imports: [
@@ -21,12 +19,12 @@ import { ProfileController } from './controllers/profile.controller';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET_KEY'),
-        signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
-        },
-      }),
+      useFactory: createJwtModuleConfig,
+    }),
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: createMulterModuleConfig,
     }),
     UserModule,
   ],

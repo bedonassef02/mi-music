@@ -4,6 +4,7 @@ export class UserDto {
     username: string;
     email: string;
     role: string;
+    image: string;
   };
   token: string;
 }

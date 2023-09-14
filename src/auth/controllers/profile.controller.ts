@@ -1,4 +1,10 @@
-import { Body, Controller, Patch, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CookieTokenInterceptor } from '../interceptors/cookie-token.interceptor';
 import { User } from '../../user/decorators/user.decorator';
 import { ChangePasswordDto } from '../dto/change-password.dto';
@@ -6,6 +12,7 @@ import { UserDto } from '../dto/user.dto';
 import { ChangeUsernameDto } from '../dto/change-username.dto';
 import { ProfileService } from '../services/profile.service';
 import { ChangeImageDto } from '../dto/change-image.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('profile')
 export class ProfileController {
@@ -29,13 +36,13 @@ export class ProfileController {
     return this.profileService.changeUsername(id, changeUsernameDto);
   }
 
-  // TODO: upload image
   @Patch('change-image')
-  @UseInterceptors(CookieTokenInterceptor)
+  @UseInterceptors(FileInterceptor('image'), CookieTokenInterceptor)
   changeImage(
     @User('id') id: string,
-    @Body() changeUsernameDto: ChangeImageDto,
+    @UploadedFile() image: Express.Multer.File,
   ): Promise<UserDto> {
-    return this.profileService.changeImage(id, changeUsernameDto);
+    return this.profileService.changeImage(id, image.filename);
   }
+  // TODO: implement change profile image
 }

@@ -8,6 +8,7 @@ export function plainIntoUserDto(user: UserDocument): UserDto {
       username: user.username,
       email: user.email,
       role: user.role,
+      image: user.image,
     },
     token: '',
   };
