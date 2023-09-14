@@ -23,6 +23,7 @@ import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 export class SongController {
   constructor(private readonly songService: SongService) {}
 
+  // TODO: upload audio file & image
   @Post()
   @Roles(USER_ROLES.ADMIN)
   create(@Body() createSongDto: CreateSongDto): Promise<SongDocument> {

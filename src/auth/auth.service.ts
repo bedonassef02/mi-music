@@ -2,12 +2,9 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { ChangeUsernameDto } from './dto/change-username.dto';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { PasswordService } from './services/password.service';
@@ -23,7 +20,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
-    private readonly eventEmitter: EventEmitter2,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<UserDto> {
@@ -51,46 +48,6 @@ export class AuthService {
       return this.generateResponse(user);
     }
     throw new BadRequestException('email or password not match our records');
-  }
-
-  async changePassword(
-    id: string,
-    changePasswordDto: ChangePasswordDto,
-  ): Promise<UserDto> {
-    if (
-      this.passwordService.isSameNewPasswords(changePasswordDto) &&
-      this.passwordService.isNewPasswordChanged(changePasswordDto)
-    ) {
-      const user: UserDocument | undefined = await this.userService.findOne(id);
-      if (
-        user &&
-        (await this.passwordService.comparePassword(
-          changePasswordDto.currentPassword,
-          user.password,
-        ))
-      ) {
-        changePasswordDto.newPassword = await this.passwordService.hashPassword(
-          changePasswordDto.newPassword,
-        );
-        const user = await this.userService.changePassword(
-          id,
-          changePasswordDto.newPassword,
-        );
-        return this.generateResponse(user);
-      }
-      throw new UnauthorizedException('password does not match out records');
-    }
-  }
-
-  async changeUsername(
-    id: string,
-    changeUsernameDto: ChangeUsernameDto,
-  ): Promise<UserDto> {
-    const user: UserDocument = await this.userService.changeUsername(
-      id,
-      changeUsernameDto.username,
-    );
-    return this.generateResponse(user);
   }
 
   verifyToken(token: string): Promise<any> {

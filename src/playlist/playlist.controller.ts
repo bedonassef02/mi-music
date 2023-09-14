@@ -20,6 +20,8 @@ import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
+  // TODO: upload image
+
   @Post()
   create(
     @User('id') user: string,

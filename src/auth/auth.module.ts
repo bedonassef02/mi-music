@@ -12,6 +12,8 @@ import { UserModule } from '../user/user.module';
 import { PasswordService } from './services/password.service';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { IsUserUpdatedMiddleware } from './middlewares/is-user-updated.middleware';
+import { ProfileService } from './services/profile.service';
+import { ProfileController } from './controllers/profile.controller';
 
 @Module({
   imports: [
@@ -28,18 +30,14 @@ import { IsUserUpdatedMiddleware } from './middlewares/is-user-updated.middlewar
     }),
     UserModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, PasswordService],
+  controllers: [AuthController, ProfileController],
+  providers: [AuthService, PasswordService, ProfileService],
   exports: [AuthService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware, IsUserUpdatedMiddleware)
-      .exclude(
-        { path: 'auth/register', method: RequestMethod.POST },
-        { path: 'auth/login', method: RequestMethod.POST },
-      )
-      .forRoutes(AuthController);
+      .forRoutes(ProfileController);
   }
 }

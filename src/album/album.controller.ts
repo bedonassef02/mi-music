@@ -22,7 +22,7 @@ import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
-
+  // TODO: upload image
   @Post()
   @Roles(USER_ROLES.ADMIN)
   create(@Body() createAlbumDto: CreateAlbumDto): Promise<AlbumDocument> {

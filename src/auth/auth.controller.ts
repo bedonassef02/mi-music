@@ -10,11 +10,8 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { ChangeUsernameDto } from './dto/change-username.dto';
 import { UserDto } from './dto/user.dto';
 import { CookieTokenInterceptor } from './interceptors/cookie-token.interceptor';
-import { User } from '../user/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -31,24 +28,6 @@ export class AuthController {
   @UseInterceptors(CookieTokenInterceptor)
   login(@Body() loginDto: LoginDto): Promise<UserDto> {
     return this.authService.login(loginDto);
-  }
-
-  @Patch('change-password')
-  @UseInterceptors(CookieTokenInterceptor)
-  changePassword(
-    @User('id') id: string,
-    @Body() changePasswordDto: ChangePasswordDto,
-  ): Promise<UserDto> {
-    return this.authService.changePassword(id, changePasswordDto);
-  }
-
-  @Patch('change-username')
-  @UseInterceptors(CookieTokenInterceptor)
-  changeUsername(
-    @User('id') id: string,
-    @Body() changeUsernameDto: ChangeUsernameDto,
-  ): Promise<UserDto> {
-    return this.authService.changeUsername(id, changeUsernameDto);
   }
 
   // TODO: implement reset password

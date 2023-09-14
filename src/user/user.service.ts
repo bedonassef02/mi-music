@@ -19,6 +19,7 @@ export class UserService {
   findOne(id: string): Promise<UserDocument> {
     return this.userModel.findById(id);
   }
+  // TODO: implement this method
   changeRole(id: string, role: string): Promise<UserDocument> {
     return this.userModel.findByIdAndUpdate(id, { role }, { new: true });
   }
@@ -28,5 +29,8 @@ export class UserService {
   }
   changeUsername(id: string, username: string): Promise<UserDocument> {
     return this.userModel.findByIdAndUpdate(id, { username }, { new: true });
+  }
+  changeImage(id: string, image: string): Promise<UserDocument> {
+    return this.userModel.findByIdAndUpdate(id, { image }, { new: true });
   }
 }
