@@ -23,18 +23,18 @@ import { SongQueryFeature } from './dto/song-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
+import { audioTypeValidation } from '../utils/validation/audio-type.valiadtion';
 
 @Controller('song')
 export class SongController {
   constructor(private readonly songService: SongService) {}
-
-  // TODO: upload audio file
   @Post()
   @Roles(USER_ROLES.ADMIN)
   @UseInterceptors(FileInterceptor('audio'))
   create(
     @Body() createSongDto: CreateSongDto,
-    @UploadedFile() audio: Express.Multer.File,
+    @UploadedFile(new ParseFilePipe(audioTypeValidation()))
+    audio: Express.Multer.File,
   ): Promise<SongDocument> {
     createSongDto.audio = audio.filename;
     return this.songService.create(createSongDto);

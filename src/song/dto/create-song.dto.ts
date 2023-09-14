@@ -8,6 +8,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateSongDto {
   @IsNotEmpty()
@@ -27,6 +28,7 @@ export class CreateSongDto {
   @Max(2023)
   releaseYear: number;
   @IsNotEmpty()
+  @Type(() => Number)
   @IsNumber()
   @Max(100)
   @Min(0)
