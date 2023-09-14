@@ -19,7 +19,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { ArtistQueryFeature } from './dto/artist-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 
-@Controller('artist')
+@Controller({ path: 'artist', version: '1' })
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 

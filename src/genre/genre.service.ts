@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -8,12 +12,18 @@ import { GenreQueryFeature } from './dto/genre-query.feature';
 
 @Injectable()
 export class GenreService {
+  private readonly logger: Logger = new Logger(GenreService.name);
   constructor(
     @InjectModel(Genre.name) private readonly genreModel: Model<Genre>,
   ) {}
 
   create(createGenreDto: CreateGenreDto): Promise<GenreDocument> {
-    return this.genreModel.create(createGenreDto);
+    try {
+      return this.genreModel.create(createGenreDto);
+    } catch (e) {
+      this.logger.error(e.message);
+      throw new InternalServerErrorException();
+    }
   }
 
   findAll(query: GenreQueryFeature): Promise<GenreDocument[]> {

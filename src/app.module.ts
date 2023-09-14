@@ -10,6 +10,8 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { configSchemaValidation } from './utils/validation/config-schema.validation';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -17,6 +19,9 @@ import { configSchemaValidation } from './utils/validation/config-schema.validat
       isGlobal: true,
       expandVariables: true,
       validationSchema: configSchemaValidation,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
     }),
     EventEmitterModule.forRoot(),
     DatabaseModule,

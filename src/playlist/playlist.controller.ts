@@ -23,7 +23,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { USER_ROLES } from '../auth/utils/types/user-role';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
-@Controller('playlist')
+@Controller({ path: 'playlist', version: '1' })
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 

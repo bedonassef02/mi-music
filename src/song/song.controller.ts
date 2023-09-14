@@ -25,7 +25,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
 import { audioTypeValidation } from '../utils/validation/audio-type.valiadtion';
 
-@Controller('song')
+@Controller({ path: 'song', version: '1' })
 export class SongController {
   constructor(private readonly songService: SongService) {}
   @Post()

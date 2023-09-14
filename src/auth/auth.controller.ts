@@ -12,7 +12,7 @@ import { LoginDto } from './dto/login.dto';
 import { UserDto } from './dto/user.dto';
 import { CookieTokenInterceptor } from './interceptors/cookie-token.interceptor';
 
-@Controller('auth')
+@Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

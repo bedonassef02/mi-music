@@ -12,7 +12,7 @@ import { PlaylistDocument } from '../entities/playlist.entity';
 import { PlaylistSongsService } from '../services/playlist-songs.service';
 import { ParseMongoIdPipe } from '../../utils/pipes/is-mongo-id.pipe';
 
-@Controller('playlist/:id/songs')
+@Controller({ path: 'playlist/:id/songs', version: '1' })
 export class PlaylistSongsController {
   constructor(private readonly playlistSongsService: PlaylistSongsService) {}
   @Post()

@@ -15,7 +15,7 @@ import { ProfileService } from '../services/profile.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../../utils/validation/image-type.validation';
 
-@Controller('profile')
+@Controller({ path: 'profile', version: '1' })
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
