@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,18 +8,17 @@ import { GenreQueryFeature } from './dto/genre-query.feature';
 
 @Injectable()
 export class GenreService {
-  private readonly logger: Logger = new Logger(GenreService.name);
   constructor(
     @InjectModel(Genre.name) private readonly genreModel: Model<Genre>,
   ) {}
 
-  create(createGenreDto: CreateGenreDto): Promise<GenreDocument> {
-    try {
+  async create(createGenreDto: CreateGenreDto): Promise<GenreDocument> {
+    const isNameExist: GenreDocument | undefined =
+      await this.genreModel.findOne({ name: createGenreDto.name });
+    if (!isNameExist) {
       return this.genreModel.create(createGenreDto);
-    } catch (e) {
-      this.logger.error(e.message);
-      throw new InternalServerErrorException();
     }
+    throw new ConflictException('name already in use');
   }
 
   findAll(query: GenreQueryFeature): Promise<GenreDocument[]> {
