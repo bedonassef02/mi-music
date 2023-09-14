@@ -11,12 +11,14 @@ import { AlbumModule } from './album/album.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { configSchemaValidation } from './utils/validation/config-schema.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
+      validationSchema: configSchemaValidation,
     }),
     EventEmitterModule.forRoot(),
     DatabaseModule,

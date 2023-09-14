@@ -1,5 +1,4 @@
 import { QueryFeature } from '../../utils/features/query.feature';
-import { IsOptional } from 'class-validator';
 import { Expose } from 'class-transformer';
 export class GenreQueryFeature extends QueryFeature {
   @Expose({ name: 'skip' })

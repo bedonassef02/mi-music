@@ -1,6 +1,5 @@
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { QueryFeature } from '../../utils/features/query.feature';
-import { IsOptional, IsString } from 'class-validator';
 
 export class AlbumQueryFeature extends QueryFeature {
   @Expose({ name: 'skip' })
