@@ -14,7 +14,6 @@ export class Playlist {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
-  // TODO: add image
   @Prop({ default: 'default.jpg' })
   image: string;
 }

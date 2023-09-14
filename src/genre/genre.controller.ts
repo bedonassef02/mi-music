@@ -23,8 +23,6 @@ import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 @Controller({ path: 'genre', version: '1' })
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
-
-  // TODO: implement filter for duplicates
   @Post()
   @Roles(USER_ROLES.ADMIN)
   create(@Body() createGenreDto: CreateGenreDto): Promise<GenreDocument> {

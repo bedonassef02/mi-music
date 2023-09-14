@@ -24,6 +24,7 @@ import { createSongMulterModuleConfig } from './utils/helpers/create-song-multer
   ],
   controllers: [SongController],
   providers: [SongService],
+  exports: [SongService],
 })
 export class SongModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

@@ -9,7 +9,7 @@ export class QueryFeature {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  public readonly limit: number = 1;
+  public readonly limit: number = 10;
   @IsOptional()
   @IsString()
   @Transform(({ value }) =>

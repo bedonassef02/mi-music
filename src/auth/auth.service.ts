@@ -29,8 +29,7 @@ export class AuthService {
       registerDto.password,
     );
     const user: UserDocument = await this.userService.create(registerDto);
-    // TODO: auto create a history playlist
-    this.createHistoryPlaylist(user.id);
+    this.createDefaultPlaylist(user.id);
     return this.generateResponse(user);
   }
 
@@ -68,7 +67,7 @@ export class AuthService {
     return true;
   }
 
-  private createHistoryPlaylist(id: string) {
+  private createDefaultPlaylist(id: string) {
     const createPlaylistDto: CreatePlaylistDto = {
       user: id,
       name: 'history',

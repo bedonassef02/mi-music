@@ -7,15 +7,19 @@ import { AuthMiddleware } from '../auth/middlewares/auth.middleware';
 import { IsUserUpdatedMiddleware } from '../auth/middlewares/is-user-updated.middleware';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { GenreSongsController } from './controllers/genre-songs.controller';
+import { GenreSongsService } from './services/genre-songs.service';
+import { SongModule } from '../song/song.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Genre.name, schema: GenreSchema }]),
     AuthModule,
     UserModule,
+    SongModule,
   ],
-  controllers: [GenreController],
-  providers: [GenreService],
+  controllers: [GenreController, GenreSongsController],
+  providers: [GenreService, GenreSongsService],
 })
 export class GenreModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

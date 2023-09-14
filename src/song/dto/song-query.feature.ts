@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { QueryFeature } from '../../utils/features/query.feature';
+import { IsMongoId, IsOptional } from 'class-validator';
 
 export class SongQueryFeature extends QueryFeature {
   @Expose({ name: 'skip' })
@@ -11,4 +12,11 @@ export class SongQueryFeature extends QueryFeature {
   get searchQuery(): any {
     return [{ name: { $regex: this.search, $options: 'i' } }];
   }
+
+  @IsOptional()
+  @IsMongoId()
+  genre?: string;
+  @IsOptional()
+  @IsMongoId()
+  artist?: string;
 }

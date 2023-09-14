@@ -16,8 +16,9 @@ export class SongService {
   }
 
   findAll(query: SongQueryFeature): Promise<SongDocument[]> {
+    const filter = this.filter(query);
     return this.songModel
-      .find({ $or: query.searchQuery })
+      .find(filter)
       .select(query.fields)
       .limit(query.limit)
       .skip(query.skip)
@@ -38,5 +39,18 @@ export class SongService {
 
   async remove(id: string): Promise<void> {
     await this.songModel.findByIdAndRemove(id);
+  }
+
+  private filter(query: SongQueryFeature): any {
+    const filter: any = {
+      $or: query.searchQuery,
+    };
+    if (query.genre) {
+      filter.genre = query.genre;
+    }
+    if (query.artist) {
+      filter.artists = { $elemMatch: { $eq: query.artist } };
+    }
+    return filter;
   }
 }

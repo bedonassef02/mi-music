@@ -30,4 +30,5 @@ export class AuthController {
   }
 
   // TODO: implement reset password
+  // TODO: implement sending email first
 }

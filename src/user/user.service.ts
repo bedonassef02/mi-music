@@ -20,6 +20,7 @@ export class UserService {
     return this.userModel.findById(id);
   }
   // TODO: implement this method
+  // TODO: implement admin module first
   changeRole(id: string, role: string): Promise<UserDocument> {
     return this.userModel.findByIdAndUpdate(id, { role }, { new: true });
   }

@@ -53,7 +53,6 @@ export class SongController {
     return this.songService.findOne(id);
   }
 
-  // TODO: implement update image
   @Patch(':id')
   @Roles(USER_ROLES.ADMIN)
   update(
