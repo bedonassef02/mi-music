@@ -11,8 +11,10 @@ import { PasswordService } from './services/password.service';
 import { UserDocument } from '../user/entities/user.entity';
 import { plainIntoUserDto } from './utils/helpers/plain-into-user-dto';
 import { UserDto } from './dto/user.dto';
-import { CreatePlaylistDto } from '../playlist/dto/create-playlist.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { InjectModel } from '@nestjs/mongoose';
+import { Token } from './entities/token.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,8 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
-    private eventEmitter: EventEmitter2,
+    private readonly eventEmitter: EventEmitter2,
+    @InjectModel(Token.name) private readonly tokenModel: Model<Token>,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<UserDto> {
@@ -29,7 +32,6 @@ export class AuthService {
       registerDto.password,
     );
     const user: UserDocument = await this.userService.create(registerDto);
-    this.createDefaultPlaylist(user.id);
     return this.generateResponse(user);
   }
 
@@ -48,7 +50,6 @@ export class AuthService {
     }
     throw new BadRequestException('email or password not match our records');
   }
-
   verifyToken(token: string): Promise<any> {
     try {
       return this.jwtService.verify(token);
@@ -66,17 +67,6 @@ export class AuthService {
     }
     return true;
   }
-
-  private createDefaultPlaylist(id: string) {
-    const createPlaylistDto: CreatePlaylistDto = {
-      user: id,
-      name: 'history',
-    };
-    this.eventEmitter.emitAsync('playlist.create', createPlaylistDto).then();
-    createPlaylistDto.name = 'favorite';
-    this.eventEmitter.emitAsync('playlist.create', createPlaylistDto).then();
-  }
-
   private generateResponse(user: UserDocument): UserDto {
     const result = plainIntoUserDto(user);
     result.token = this.jwtService.sign(result.user);

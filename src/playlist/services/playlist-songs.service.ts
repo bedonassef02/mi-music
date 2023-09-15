@@ -3,6 +3,7 @@ import { FindPlaylistDto } from '../dto/find-playlist.dto';
 import { Playlist, PlaylistDocument } from '../entities/playlist.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PlaylistSongsService {
@@ -14,7 +15,6 @@ export class PlaylistSongsService {
     song: string,
   ): Promise<PlaylistDocument> {
     const playlist: PlaylistDocument = await this.findOne(findPlaylistDto);
-    console.log(playlist);
     if (!playlist.songs.includes(song)) {
       playlist.songs.push(song);
       return playlist.save();
@@ -52,5 +52,18 @@ export class PlaylistSongsService {
     }
 
     return playlist;
+  }
+
+  @OnEvent('playlist.add')
+  async addToPlaylist(
+    findPlaylistDto: FindPlaylistDto,
+    song: string,
+  ): Promise<void> {
+    const historyPlaylist: PlaylistDocument = await this.playlistModel.findOne({
+      user: findPlaylistDto.user,
+      name: findPlaylistDto.name,
+    });
+    findPlaylistDto._id = historyPlaylist.id;
+    await this.addSong(findPlaylistDto, song);
   }
 }

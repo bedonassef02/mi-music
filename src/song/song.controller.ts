@@ -48,8 +48,9 @@ export class SongController {
 
   @Get(':id')
   @Public()
-  @UsePipes(ParseMongoIdPipe)
-  findOne(@Param('id') id: string): Promise<SongDocument | undefined> {
+  findOne(
+    @Param('id', ParseMongoIdPipe) id: string,
+  ): Promise<SongDocument | undefined> {
     return this.songService.findOne(id);
   }
 

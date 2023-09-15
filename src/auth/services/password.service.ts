@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { ChangePasswordDto } from '../dto/change-password.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
 @Injectable()
 export class PasswordService {
   private readonly SALT: number = 12;
@@ -24,7 +25,7 @@ export class PasswordService {
     return true;
   }
 
-  isSameNewPasswords(changePasswordDto: ChangePasswordDto) {
+  isSameNewPasswords(changePasswordDto: ChangePasswordDto | ResetPasswordDto) {
     if (changePasswordDto.newPassword === changePasswordDto.confirmPassword) {
       return true;
     }

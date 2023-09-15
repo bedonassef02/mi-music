@@ -12,10 +12,15 @@ import { ProfileController } from './controllers/profile.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { createJwtModuleConfig } from './utils/helpers/create-jwt-module-config';
 import { createAuthMulterModuleConfig } from './utils/helpers/create-auth-multer-module-config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Token, TokenSchema } from './entities/token.entity';
+import { ResetPasswordService } from './services/reset-password.service';
+import { ResetPasswordController } from './controllers/reset-password.controller';
 
 @Module({
   imports: [
     ConfigModule,
+    MongooseModule.forFeature([{ name: Token.name, schema: TokenSchema }]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,8 +33,13 @@ import { createAuthMulterModuleConfig } from './utils/helpers/create-auth-multer
     }),
     UserModule,
   ],
-  controllers: [AuthController, ProfileController],
-  providers: [AuthService, PasswordService, ProfileService],
+  controllers: [AuthController, ProfileController, ResetPasswordController],
+  providers: [
+    AuthService,
+    PasswordService,
+    ProfileService,
+    ResetPasswordService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule implements NestModule {
