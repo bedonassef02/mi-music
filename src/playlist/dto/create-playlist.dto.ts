@@ -6,8 +6,10 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePlaylistDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @Length(1, 128)

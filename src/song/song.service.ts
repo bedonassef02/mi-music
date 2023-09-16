@@ -25,7 +25,6 @@ export class SongService {
       .sort(query.sort);
   }
 
-  // TODO: add to history playlist using event listener
   findOne(id: string): Promise<SongDocument | undefined> {
     return this.songModel.findById(id);
   }
