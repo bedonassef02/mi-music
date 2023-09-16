@@ -6,6 +6,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class RegisterDto {
   @ApiProperty()
@@ -22,5 +23,5 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   @Length(8, 32)
-  password: string;
+  password?: string;
 }

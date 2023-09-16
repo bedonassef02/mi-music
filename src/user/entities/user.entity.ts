@@ -15,6 +15,8 @@ export class User {
   role: string;
   @Prop({ default: 'default.jpg' })
   image: string;
+  @Prop({ default: 'google' })
+  client: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

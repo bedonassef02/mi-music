@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './entities/user.entity';
 import { Model } from 'mongoose';
+import { RegisterDto } from '../auth/dto/register.dto';
 
 @Injectable()
 export class UserService {
@@ -9,7 +10,7 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  create(registerUserDto): Promise<UserDocument> {
+  create(registerUserDto: RegisterDto): Promise<UserDocument> {
     return this.userModel.create(registerUserDto);
   }
 

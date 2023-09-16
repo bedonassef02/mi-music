@@ -16,6 +16,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Token, TokenSchema } from './entities/token.entity';
 import { ResetPasswordService } from './services/reset-password.service';
 import { ResetPasswordController } from './controllers/reset-password.controller';
+import { OAuthController } from './controllers/o-auth.controller';
+import { OAuthService } from './services/o-auth.service';
+import { GoogleStrategy } from './strategies/google-srategy';
 
 @Module({
   imports: [
@@ -33,12 +36,19 @@ import { ResetPasswordController } from './controllers/reset-password.controller
     }),
     UserModule,
   ],
-  controllers: [AuthController, ProfileController, ResetPasswordController],
+  controllers: [
+    AuthController,
+    ProfileController,
+    ResetPasswordController,
+    OAuthController,
+  ],
   providers: [
     AuthService,
     PasswordService,
     ProfileService,
     ResetPasswordService,
+    GoogleStrategy,
+    OAuthService,
   ],
   exports: [AuthService],
 })
