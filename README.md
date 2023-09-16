@@ -50,6 +50,21 @@ Mi-Music leverages cutting-edge technologies to deliver a seamless and secure mu
 - **multer:** Enables efficient file uploads.
 
 - **passport-js:** Simplifies authentication processes.
+Certainly, here's an improved version of your Postman Documentation section:
+
+## 📚 Postman Documentation
+
+For detailed documentation of Mi-Music's API endpoints and how to interact with them, please refer to our comprehensive Postman collection:
+
+[![Postman Documentation](https://img.shields.io/badge/Postman-Documentation-orange)](https://documenter.getpostman.com/view/23775737/2s9YC7SWdF)
+
+This Postman collection provides you with a user-friendly interface to explore and test Mi-Music's API functionalities, making it easier for you to integrate and utilize the services we offer.
+
+Feel free to dive into the documentation to understand how to use Mi-Music's API effectively.
+
+[Explore Postman Documentation](https://documenter.getpostman.com/view/23775737/2s9YC7SWdF)
+
+This improved section adds a visual badge for the Postman Documentation link and provides a clear call-to-action to explore the documentation, making it more engaging and accessible for users.
 ## 🧐 Key Features
 
 Mi-Music boasts a rich set of features designed to enhance the music streaming experience, catering to both users and administrators:
