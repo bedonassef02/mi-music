@@ -18,6 +18,7 @@ import { USER_ROLES } from '../auth/utils/types/user-role';
 import { Public } from '../auth/decorators/public.decorator';
 import { ArtistQueryFeature } from './dto/artist-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
+import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
 
 @Controller({ path: 'artist', version: '1' })
 export class ArtistController {
@@ -31,7 +32,9 @@ export class ArtistController {
   }
 
   @Get()
-  findAll(@Query() query: ArtistQueryFeature): Promise<Artist[]> {
+  findAll(
+    @Query() query: ArtistQueryFeature,
+  ): Promise<PaginationResponseFeature> {
     return this.artistService.findAll(query);
   }
 

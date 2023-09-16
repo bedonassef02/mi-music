@@ -24,6 +24,7 @@ import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
 
+// TODO: make album songs controller & service
 @Controller({ path: 'album', version: '1' })
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}

@@ -18,6 +18,7 @@ import { USER_ROLES } from '../auth/utils/types/user-role';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { GenreQueryFeature } from './dto/genre-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
+import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
 
 @Controller({ path: 'genre', version: '1' })
 export class GenreController {
@@ -30,7 +31,9 @@ export class GenreController {
 
   @Get()
   @Public()
-  findAll(@Query() query: GenreQueryFeature): Promise<GenreDocument[]> {
+  findAll(
+    @Query() query: GenreQueryFeature,
+  ): Promise<PaginationResponseFeature> {
     return this.genreService.findAll(query);
   }
 

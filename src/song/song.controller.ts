@@ -41,6 +41,7 @@ export class SongController {
     return this.songService.create(createSongDto);
   }
 
+  // TODO: show pagination details
   @Get()
   @Public()
   findAll(@Query() query: SongQueryFeature): Promise<SongDocument[]> {
