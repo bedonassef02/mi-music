@@ -19,7 +19,6 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { GenreQueryFeature } from './dto/genre-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 
-// TODO: make another controller and service to get genre with songs
 @Controller({ path: 'genre', version: '1' })
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}

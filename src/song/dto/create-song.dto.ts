@@ -23,7 +23,6 @@ export class CreateSongDto {
   genre: string;
   @IsOptional()
   @IsNumber()
-  // TODO: make years as enum
   @Min(1960)
   @Max(2023)
   releaseYear: number;

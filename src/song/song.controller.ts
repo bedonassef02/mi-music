@@ -24,6 +24,7 @@ import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
 import { audioTypeValidation } from '../utils/validation/audio-type.valiadtion';
+import { AddSongHistoryPlaylistInterceptor } from './interceptors/add-song-history-playlist.interceptor';
 
 @Controller({ path: 'song', version: '1' })
 export class SongController {
@@ -48,6 +49,7 @@ export class SongController {
 
   @Get(':id')
   @Public()
+  @UseInterceptors(AddSongHistoryPlaylistInterceptor)
   findOne(
     @Param('id', ParseMongoIdPipe) id: string,
   ): Promise<SongDocument | undefined> {
