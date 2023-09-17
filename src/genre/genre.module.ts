@@ -25,6 +25,6 @@ export class GenreModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware, IsUserUpdatedMiddleware)
-      .forRoutes(GenreController);
+      .forRoutes(GenreController, GenreSongsController);
   }
 }

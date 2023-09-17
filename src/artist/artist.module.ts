@@ -25,6 +25,6 @@ export class ArtistModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware, IsUserUpdatedMiddleware)
-      .forRoutes(ArtistController);
+      .forRoutes(ArtistController, ArtistSongsController);
   }
 }
