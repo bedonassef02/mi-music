@@ -19,4 +19,7 @@ export class SongQueryFeature extends QueryFeature {
   @IsOptional()
   @IsMongoId()
   artist?: string;
+  @IsOptional()
+  @IsMongoId()
+  album?: string;
 }

@@ -50,6 +50,9 @@ export class SongService {
     if (query.artist) {
       filter.artists = { $elemMatch: { $eq: query.artist } };
     }
+    if (query.album) {
+      filter.artists = { $elemMatch: { $eq: query.album } };
+    }
     return filter;
   }
 }

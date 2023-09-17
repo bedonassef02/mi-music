@@ -11,5 +11,4 @@ export class AlbumQueryFeature extends QueryFeature {
   get searchQuery(): any {
     return [{ name: { $regex: this.search, $options: 'i' } }];
   }
-  // TODO: make filter for releaseYear[gte]=2015
 }

@@ -10,6 +10,9 @@ import { UserModule } from '../user/user.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { createAlbumMulterModuleConfig } from './utils/helpers/create-album-multer-module-config';
+import { AlbumSongsController } from './controllers/album-songs.controller';
+import { AlbumSongsService } from './services/album-songs.service';
+import { SongModule } from '../song/song.module';
 
 @Module({
   imports: [
@@ -21,14 +24,15 @@ import { createAlbumMulterModuleConfig } from './utils/helpers/create-album-mult
     }),
     AuthModule,
     UserModule,
+    SongModule,
   ],
-  controllers: [AlbumController],
-  providers: [AlbumService],
+  controllers: [AlbumController, AlbumSongsController],
+  providers: [AlbumService, AlbumSongsService],
 })
 export class AlbumModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(AuthMiddleware, IsUserUpdatedMiddleware)
-      .forRoutes(AlbumController);
+      .forRoutes(AlbumController, AlbumSongsController);
   }
 }
