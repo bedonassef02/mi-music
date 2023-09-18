@@ -26,6 +26,10 @@ export class CreateSongDto {
   @IsMongoId()
   genre: string;
   @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  album: string;
+  @ApiProperty()
   @IsOptional()
   @IsNumber()
   @Min(1960)
