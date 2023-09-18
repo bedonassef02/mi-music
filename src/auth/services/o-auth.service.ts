@@ -2,14 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '../../user/user.service';
 import { UserDocument } from '../../user/entities/user.entity';
 import { UserDto } from '../dto/user.dto';
-import { plainIntoUserDto } from '../utils/helpers/plain-into-user-dto';
-import { JwtService } from '@nestjs/jwt';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class OAuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async googleLogin(user: any) {
@@ -31,17 +30,11 @@ export class OAuthService {
       email,
       username,
     });
-    return this.generateResponse(user);
+    return this.tokenService.generateResponse(user);
   }
 
   async login(email: string): Promise<UserDto> {
     const user: UserDocument = await this.userService.findByEmail(email);
-    return this.generateResponse(user);
-  }
-
-  private generateResponse(user: UserDocument): UserDto {
-    const result = plainIntoUserDto(user);
-    result.token = this.jwtService.sign(result.user);
-    return result;
+    return this.tokenService.generateResponse(user);
   }
 }

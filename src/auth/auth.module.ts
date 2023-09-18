@@ -19,6 +19,7 @@ import { ResetPasswordController } from './controllers/reset-password.controller
 import { OAuthController } from './controllers/o-auth.controller';
 import { OAuthService } from './services/o-auth.service';
 import { GoogleStrategy } from './strategies/google-srategy';
+import { TokenService } from './services/token.service';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { GoogleStrategy } from './strategies/google-srategy';
     ResetPasswordService,
     GoogleStrategy,
     OAuthService,
+    TokenService,
   ],
   exports: [AuthService],
 })

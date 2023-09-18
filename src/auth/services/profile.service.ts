@@ -4,16 +4,15 @@ import { UserDto } from '../dto/user.dto';
 import { UserDocument } from '../../user/entities/user.entity';
 import { ChangeUsernameDto } from '../dto/change-username.dto';
 import { UserService } from '../../user/user.service';
-import { JwtService } from '@nestjs/jwt';
 import { PasswordService } from './password.service';
-import { plainIntoUserDto } from '../utils/helpers/plain-into-user-dto';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class ProfileService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
+    private readonly tokenService: TokenService,
   ) {}
   async changePassword(
     id: string,
@@ -38,7 +37,7 @@ export class ProfileService {
           id,
           changePasswordDto.newPassword,
         );
-        return this.generateResponse(user);
+        return this.tokenService.generateResponse(user);
       }
       throw new UnauthorizedException('password does not match out records');
     }
@@ -52,17 +51,11 @@ export class ProfileService {
       id,
       changeUsernameDto.username,
     );
-    return this.generateResponse(user);
+    return this.tokenService.generateResponse(user);
   }
 
   async changeImage(id: string, image: string): Promise<UserDto> {
     const user: UserDocument = await this.userService.changeImage(id, image);
-    return this.generateResponse(user);
-  }
-
-  private generateResponse(user: UserDocument): UserDto {
-    const result = plainIntoUserDto(user);
-    result.token = this.jwtService.sign(result.user);
-    return result;
+    return this.tokenService.generateResponse(user);
   }
 }

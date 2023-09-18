@@ -17,4 +17,8 @@ export const configSchemaValidation = Joi.object({
 
   UPLOADS_DIR: Joi.string().required(),
   USER_IMAGE_DIR: Joi.string().required(),
+
+  GOOGLE_CLIENT_ID: Joi.string().required(),
+  GOOGLE_SECRET: Joi.string().required(),
+  GOOGLE_REDIRECT_URL: Joi.string().uri().required(),
 });

@@ -5,23 +5,22 @@ import { SendResetPasswordEmailDto } from '../../email/dto/send-reset-password-e
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { UserDto } from '../dto/user.dto';
 import { UserService } from '../../user/user.service';
-import { JwtService } from '@nestjs/jwt';
 import { PasswordService } from './password.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
 import { Token } from '../entities/token.entity';
 import { Model } from 'mongoose';
-import { plainIntoUserDto } from '../utils/helpers/plain-into-user-dto';
 import { ConfigService } from '@nestjs/config';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class ResetPasswordService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
     private readonly passwordService: PasswordService,
     private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService,
+    private readonly tokenService: TokenService,
     @InjectModel(Token.name) private readonly tokenModel: Model<Token>,
   ) {}
 
@@ -34,7 +33,9 @@ export class ResetPasswordService {
     if (!user) {
       throw new NotFoundException('this email not exist');
     }
-    const token: string = this.jwtService.sign({ email: user.email });
+    const token: string = this.tokenService.generateToken({
+      email: user.email,
+    });
     const sendResetPasswordEmailDto: SendResetPasswordEmailDto = {
       user: user.id,
       token,
@@ -53,12 +54,6 @@ export class ResetPasswordService {
       resetPasswordDto.user,
       resetPasswordDto.newPassword,
     );
-    return this.generateResponse(user);
-  }
-
-  private generateResponse(user: UserDocument): UserDto {
-    const result = plainIntoUserDto(user);
-    result.token = this.jwtService.sign(result.user);
-    return result;
+    return this.tokenService.generateResponse(user);
   }
 }

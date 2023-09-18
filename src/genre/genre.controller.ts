@@ -7,8 +7,9 @@ import {
   Param,
   Delete,
   Query,
-  UsePipes, UseGuards
-} from "@nestjs/common";
+  UsePipes,
+  UseGuards,
+} from '@nestjs/common';
 import { GenreService } from './genre.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
@@ -19,7 +20,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { GenreQueryFeature } from './dto/genre-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
-import { RoleGuard } from "../auth/guards/role.guard";
+import { RoleGuard } from '../auth/guards/role.guard';
 
 @Controller({ path: 'genre', version: '1' })
 export class GenreController {

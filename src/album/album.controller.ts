@@ -10,8 +10,9 @@ import {
   UsePipes,
   UseInterceptors,
   UploadedFile,
-  ParseFilePipe, UseGuards
-} from "@nestjs/common";
+  ParseFilePipe,
+  UseGuards,
+} from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -23,7 +24,8 @@ import { AlbumQueryFeature } from './dto/album-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
-import { RoleGuard } from "../auth/guards/role.guard";
+import { RoleGuard } from '../auth/guards/role.guard';
+import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
 
 // TODO: make album songs controller & service
 @Controller({ path: 'album', version: '1' })
@@ -38,7 +40,9 @@ export class AlbumController {
 
   @Get()
   @Public()
-  findAll(@Query() query: AlbumQueryFeature): Promise<AlbumDocument[]> {
+  findAll(
+    @Query() query: AlbumQueryFeature,
+  ): Promise<PaginationResponseFeature> {
     return this.albumService.findAll(query);
   }
 

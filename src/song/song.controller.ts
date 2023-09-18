@@ -10,8 +10,9 @@ import {
   UsePipes,
   UploadedFile,
   UseInterceptors,
-  ParseFilePipe, UseGuards
-} from "@nestjs/common";
+  ParseFilePipe,
+  UseGuards,
+} from '@nestjs/common';
 import { SongService } from './song.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
@@ -25,7 +26,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { imageTypeValidation } from '../utils/validation/image-type.validation';
 import { audioTypeValidation } from '../utils/validation/audio-type.valiadtion';
 import { AddSongHistoryPlaylistInterceptor } from './interceptors/add-song-history-playlist.interceptor';
-import { RoleGuard } from "../auth/guards/role.guard";
+import { RoleGuard } from '../auth/guards/role.guard';
+import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
 
 @Controller({ path: 'song', version: '1' })
 export class SongController {
@@ -43,10 +45,11 @@ export class SongController {
     return this.songService.create(createSongDto);
   }
 
-  // TODO: show pagination details
   @Get()
   @Public()
-  findAll(@Query() query: SongQueryFeature): Promise<SongDocument[]> {
+  findAll(
+    @Query() query: SongQueryFeature,
+  ): Promise<PaginationResponseFeature> {
     return this.songService.findAll(query);
   }
 

@@ -19,7 +19,7 @@ import { EmailModule } from './email/email.module';
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
-      // validationSchema: configSchemaValidation,
+      validationSchema: configSchemaValidation,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),

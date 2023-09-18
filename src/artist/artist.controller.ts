@@ -7,8 +7,9 @@ import {
   Param,
   Delete,
   Query,
-  UsePipes, UseGuards
-} from "@nestjs/common";
+  UsePipes,
+  UseGuards,
+} from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -19,7 +20,7 @@ import { Public } from '../auth/decorators/public.decorator';
 import { ArtistQueryFeature } from './dto/artist-query.feature';
 import { ParseMongoIdPipe } from '../utils/pipes/is-mongo-id.pipe';
 import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
-import { RoleGuard } from "../auth/guards/role.guard";
+import { RoleGuard } from '../auth/guards/role.guard';
 
 @Controller({ path: 'artist', version: '1' })
 export class ArtistController {

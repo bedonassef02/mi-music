@@ -5,6 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Song, SongDocument } from './entities/song.entity';
 import { Model } from 'mongoose';
 import { SongQueryFeature } from './dto/song-query.feature';
+import { paginationDetails } from '../utils/helpers/pagination-details';
+import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
 
 @Injectable()
 export class SongService {
@@ -15,14 +17,16 @@ export class SongService {
     return this.songModel.create(createSongDto);
   }
 
-  findAll(query: SongQueryFeature): Promise<SongDocument[]> {
+  async findAll(query: SongQueryFeature): Promise<PaginationResponseFeature> {
     const filter = this.filter(query);
-    return this.songModel
+    const songs: SongDocument[] = await this.songModel
       .find(filter)
       .select(query.fields)
       .limit(query.limit)
       .skip(query.skip)
       .sort(query.sort);
+    const totalItems: number = await this.totalItems(filter);
+    return paginationDetails(query, songs, totalItems);
   }
 
   findOne(id: string): Promise<SongDocument | undefined> {
@@ -48,11 +52,15 @@ export class SongService {
       filter.genre = query.genre;
     }
     if (query.artist) {
-      filter.artists = { $elemMatch: { $eq: query.artist } };
+      filter.artist = { $elemMatch: { $eq: query.artist } };
     }
     if (query.album) {
-      filter.artists = { $elemMatch: { $eq: query.album } };
+      filter.album = query.album;
     }
     return filter;
+  }
+
+  private async totalItems(searchQuery: any): Promise<number> {
+    return this.songModel.countDocuments(searchQuery);
   }
 }

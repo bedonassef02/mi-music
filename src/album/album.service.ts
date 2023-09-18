@@ -5,6 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Album, AlbumDocument } from './entities/album.entity';
 import { Model } from 'mongoose';
 import { AlbumQueryFeature } from './dto/album-query.feature';
+import { paginationDetails } from '../utils/helpers/pagination-details';
+import { PaginationResponseFeature } from '../utils/features/pagination-response.feature';
 
 @Injectable()
 export class AlbumService {
@@ -15,14 +17,15 @@ export class AlbumService {
     return this.albumModel.create(createAlbumDto);
   }
 
-  findAll(query: AlbumQueryFeature): Promise<AlbumDocument[]> {
-    console.log(query);
-    return this.albumModel
+  async findAll(query: AlbumQueryFeature): Promise<PaginationResponseFeature> {
+    const albums: Album[] = await this.albumModel
       .find({ $or: query.searchQuery })
       .select(query.fields)
       .limit(query.limit)
       .skip(query.skip)
       .sort(query.sort);
+    const totalItems: number = await this.totalItems(query.searchQuery);
+    return paginationDetails(query, albums, totalItems);
   }
 
   findOne(id: string): Promise<AlbumDocument | undefined> {
@@ -38,5 +41,9 @@ export class AlbumService {
 
   async remove(id: string): Promise<void> {
     await this.albumModel.findByIdAndRemove(id);
+  }
+
+  private async totalItems(searchQuery: any): Promise<number> {
+    return this.albumModel.countDocuments({ $or: searchQuery });
   }
 }
